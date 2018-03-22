@@ -3,7 +3,43 @@ import logo from './brand.png';
 import search from './search.png';
 import './App.css';
 
+import ApiClient from './api-client';
+
 class App extends Component {
+  constructor() {
+    super();
+
+    this.apiClient = new ApiClient();
+
+    this.news = [];
+
+    this.updateNews = (response) => {
+      var that = this;
+      
+      response.json()
+        .then(function (newsResponse) {
+          that.news = newsResponse.articles;
+        });
+    }
+
+    this.showTopHeadLines = () => {
+      var countries = [
+        {'country': 'us'},
+        {'country': 'fr'},
+        {'country': 'br'},
+        {'country': 'ar'}
+      ];
+
+      this.apiClient.getTopHeadLines(countries)
+        .then(this.updateNews)
+    }
+
+    this.showNewsFrom = (country) => {
+      this.apiClient.getNewsFrom(country)
+        .then(this.updateNews);
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -11,49 +47,49 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
 
 
-{/* SEARCH-INPUT */}
-<div className="App-Search">
-          <input className="App-Input" type="text" placeholder="Search.."/>
-      <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search"/></button>
-</div>
+          {/* SEARCH-INPUT */}
+          <div className="App-Search">
+            <input className="App-Input" type="text" placeholder="Search.." />
+            <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+          </div>
           {/* <h1 className="App-title">Welcome to React</h1> */}
-          
+
         </header>
-        
-        
+
+
         {/* MENU */}
-  
-  <div className="navbar">
-    <a href="#noticiasemdestaque" className="active">NOTÍCIAS EM DESTAQUE</a>
-    <a href="#noticiasdobrasil">NOTÍCIAS DO BRASIL</a>
-    <a href="#noticiasdoeua">NOTÍCIAS DO EUA</a>
-    <a href="#noticiasdaargentina">NOTÍCIAS DA ARGENTINA</a>
-    <a href="#noticiasdafrança">NOTÍCIAS DA FRANÇA</a>
-  </div>
-<div className="grid-center">
-  <div className="grid-container">
-    <div className="item1">1</div>
-    <div className="item2">2</div>
-    <div className="item3">3</div>  
-    <div className="item4">4</div>
-    <div className="item5">5</div>
-    <div className="item6">6</div>
-    <div className="item7">7</div>
-</div>
-  </div>
 
-<div>
-      <div className="pagination active"><a href="1">1</a></div>
-      <div className="pagination"><a href="2">2</a></div>
-      <div className="pagination"><a href="3">3</a></div>
-      <div className="pagination"><a href="4">4</a></div>
-      <div className="pagination"><a href="5">5</a></div>
+        <div className="navbar">
+          <a href="#noticiasemdestaque" className="active" onClick={this.showTopHeadLines()}>NOTÍCIAS EM DESTAQUE</a>
+          <a href="#noticiasdobrasil">NOTÍCIAS DO BRASIL</a>
+          <a href="#noticiasdoeua">NOTÍCIAS DO EUA</a>
+          <a href="#noticiasdaargentina">NOTÍCIAS DA ARGENTINA</a>
+          <a href="#noticiasdafrança">NOTÍCIAS DA FRANÇA</a>
+        </div>
+        <div className="grid-center">
+          <div className="grid-container">
+            <div className="item1">1</div>
+            <div className="item2">2</div>
+            <div className="item3">3</div>
+            <div className="item4">4</div>
+            <div className="item5">5</div>
+            <div className="item6">6</div>
+            <div className="item7">7</div>
+          </div>
+        </div>
 
-
-</div>
+        <div>
+          <div className="pagination active"><a href="1">1</a></div>
+          <div className="pagination"><a href="2">2</a></div>
+          <div className="pagination"><a href="3">3</a></div>
+          <div className="pagination"><a href="4">4</a></div>
+          <div className="pagination"><a href="5">5</a></div>
 
 
-  {/* <div className="grid-container">
+        </div>
+
+
+        {/* <div className="grid-container">
   <div>1</div>
   <div>2</div>
   </div>
@@ -78,22 +114,22 @@ class App extends Component {
                 <li><a id="p5" class="page" href="#">5</a></li>
             </ul>
         </nav> */}
-   
 
 
 
-      {/* FOOTER */}
-      <div className="footer">
-  
-      <img src={logo} className="logo-footer" alt="logo" />
-</div>
+
+        {/* FOOTER */}
+        <div className="footer">
+
+          <img src={logo} className="logo-footer" alt="logo" />
+        </div>
 
 
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
       </div>
-      
+
     );
   }
 }
