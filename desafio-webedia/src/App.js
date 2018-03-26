@@ -31,9 +31,27 @@ class App extends Component {
       
       var news = [];
       
+      var largerCount = 0;
+      var isLarger = true;
+
       for(var currentNewData  of newsResponse.articles)
       {
-        var currentNew = new New(currentNewData);
+        let cardClass = "normal";
+        
+        if(isLarger && (!(largerCount % 2 == 0) || largerCount == 0)){
+          cardClass = "larger";
+        }else if(largerCount % 3 == 0){  
+          largerCount = 0;
+          isLarger = true;
+          cardClass = "larger";          
+        }else if(isLarger){
+          largerCount = 0;
+          isLarger = false;
+        }
+        
+        largerCount ++;
+        
+        var currentNew = new New(currentNewData, cardClass);
         news.push(currentNew);
       }
 
@@ -130,8 +148,7 @@ class App extends Component {
             <input className="App-Input" type="text" placeholder="Search.." />
             <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
           </div>
-          {/* <h1 className="App-title">Welcome to React</h1> */}
-
+          
         </header>
 
 
@@ -155,7 +172,7 @@ class App extends Component {
 
         {/* PAGINATION */}
 
-        <nav class="pages">
+        <nav className="pages">
           <ul>
             {this.paginationButtons.map(pageButton => pageButton.render())}
           </ul>

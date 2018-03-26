@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 export default class New extends Component{
-    constructor(newData){
+    constructor(newData, cardClass){
         super();
 
         let newPulishTimestamp = Date.parse(newData.publishedAt);
@@ -13,11 +13,12 @@ export default class New extends Component{
         this.content = newData.description;
         this.author = newData.author;
         this.url = newData.url;
+        this.cardClass = cardClass;
     }
     
     render(){
         return (
-        <a href={this.url} target="_blank">
+        <a href={this.url} className={this.cardClass} target="_blank">
             <div className="new-container">
                 <div className="new-image">
                     <img src={this.image}/> 
