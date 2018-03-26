@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+
+import New from './new-component';
+import ApiClient from './api-client';
+
 import logo from './brand.png';
 import search from './search.png';
+
 import './App.css';
 
-import ApiClient from './api-client';
 
 class App extends Component {
   constructor() {
@@ -12,17 +16,33 @@ class App extends Component {
     this.apiClient = new ApiClient();
 
     this.news = [];
+    this.paginationButtons = [];
+    this.currentPage = 0;
+    this.currentCountry = "";
+    
+    this.MAX_PAGES = 5;
+    this.PAGE_SIZE = 7;
+    this.ALL = "all";
 
-    this.updateNews = (response) => {
-      var that = this;
+    this.updateNews = (newsResponse) => {
+      if(newsResponse.status == "error"){
+        return;
+      }
       
-      response.json()
-        .then(function (newsResponse) {
-          that.news = newsResponse.articles;
-        });
+      var news = [];
+      
+      for(var currentNewData  of newsResponse.articles)
+      {
+        var currentNew = new New(currentNewData);
+        news.push(currentNew);
+      }
+
+      this.news = news;
+      this.updatePaginationButtons();
+      this.setState({});
     }
 
-    this.showTopHeadLines = () => {
+    this.showTopHeadLines = (page) => {
       var countries = [
         {'country': 'us'},
         {'country': 'fr'},
@@ -30,24 +50,82 @@ class App extends Component {
         {'country': 'ar'}
       ];
 
-      this.apiClient.getTopHeadLines(countries)
+      this.currentCountry = this.ALL;
+
+      this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page)
+        .then(response => response.json())
         .then(this.updateNews)
     }
 
     this.showNewsFrom = (country) => {
-      this.apiClient.getNewsFrom(country)
-        .then(this.updateNews);
+      this.currentCountry = country;
+      this.currentPage = 0;
+      
+      this.apiClient.getNewsFrom(country, this.PAGE_SIZE, this.currentPage)
+      .then(response=> response.json())  
+      .then(this.updateNews);
     }
+
+    this.goToPage = (page) => {
+      this.currentPage = page;
+      
+      //A PAGINAÇÃO DA API NÃO COMEÇA A PARTIR DO ZERO
+      let selectedPage = this.currentPage + 1;
+
+      if(this.currentCountry == this.ALL){
+        this.showTopHeadLines(selectedPage);
+        return;
+      }
+      
+      
+      this.apiClient.getNewsFrom(this.currentCountry, this.PAGE_SIZE, selectedPage)
+      .then(response=> response.json())  
+      .then(this.updateNews);
+    }
+
+    this.updatePaginationButtons = () => {
+      this.paginationButtons = [];
+      
+      for(var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++){
+        let isSelected = false;
+        
+        if(currentButtonIndex == this.currentPage)
+        {
+          isSelected = true;
+        }
+
+        let buttonClassName = "page ";
+        buttonClassName += isSelected ? "active" : "";
+
+        let pageIndex = currentButtonIndex;
+
+        this.paginationButtons.push({ 
+          index: pageIndex,
+          render: () => 
+          <li>
+            <a id="p1" className={buttonClassName} href="#" onClick={ () => this.goToPage(pageIndex) }>{pageIndex + 1}</a>
+          </li>
+        });
+      }
+    }
+
+    this.showTopHeadLines();
   }
 
   render() {
+    
+    for(var buttonIndex = 0; buttonIndex < 5; )
+    
     return (
       <div className="App">
+        {/*HEADER*/}
+        
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
 
 
           {/* SEARCH-INPUT */}
+          
           <div className="App-Search">
             <input className="App-Input" type="text" placeholder="Search.." />
             <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
@@ -60,74 +138,34 @@ class App extends Component {
         {/* MENU */}
 
         <div className="navbar">
-          <a href="#noticiasemdestaque" className="active" onClick={this.showTopHeadLines()}>NOTÍCIAS EM DESTAQUE</a>
-          <a href="#noticiasdobrasil">NOTÍCIAS DO BRASIL</a>
-          <a href="#noticiasdoeua">NOTÍCIAS DO EUA</a>
-          <a href="#noticiasdaargentina">NOTÍCIAS DA ARGENTINA</a>
-          <a href="#noticiasdafrança">NOTÍCIAS DA FRANÇA</a>
+          <a href="#noticiasemdestaque" className="active" onClick={() => this.showTopHeadLines(1) }>NOTÍCIAS EM DESTAQUE</a>
+          <a href="#noticiasdobrasil" onClick={()=> this.showNewsFrom('br')}>NOTÍCIAS DO BRASIL</a>
+          <a href="#noticiasdoeua" onClick={()=> this.showNewsFrom('us')}>NOTÍCIAS DO EUA</a>
+          <a href="#noticiasdaargentina" onClick={()=> this.showNewsFrom('ar')}>NOTÍCIAS DA ARGENTINA</a>
+          <a href="#noticiasdafrança" onClick={()=> this.showNewsFrom('fr')}>NOTÍCIAS DA FRANÇA</a>
         </div>
+        
+        {/* GRID */}
+        
         <div className="grid-center">
           <div className="grid-container">
-            <div className="item1">1</div>
-            <div className="item2">2</div>
-            <div className="item3">3</div>
-            <div className="item4">4</div>
-            <div className="item5">5</div>
-            <div className="item6">6</div>
-            <div className="item7">7</div>
+            { this.news.map((currentNew) => currentNew.render() ) }
           </div>
         </div>
 
-        <div>
-          <div className="pagination active"><a href="1">1</a></div>
-          <div className="pagination"><a href="2">2</a></div>
-          <div className="pagination"><a href="3">3</a></div>
-          <div className="pagination"><a href="4">4</a></div>
-          <div className="pagination"><a href="5">5</a></div>
+        {/* PAGINATION */}
 
-
-        </div>
-
-
-        {/* <div className="grid-container">
-  <div>1</div>
-  <div>2</div>
-  </div>
-
-  <div className="grid-container2">
-  <div>3</div>
-  <div>4</div>
-  <div>5</div>
-  <div>6</div>
-  <div>7</div>
-  </div> */}
-
-
-
-
-        {/* <nav class="pages">
-            <ul>
-                <li><a id="p1" class="page active" href="#">1</a></li>
-                <li><a id="p2" class="page" href="#">2</a></li>
-                <li><a id="p3" class="page" href="#">3</a></li>
-                <li><a id="p4" class="page" href="#">4</a></li>
-                <li><a id="p5" class="page" href="#">5</a></li>
-            </ul>
-        </nav> */}
-
-
-
-
+        <nav class="pages">
+          <ul>
+            {this.paginationButtons.map(pageButton => pageButton.render())}
+          </ul>
+        </nav>
+        
         {/* FOOTER */}
         <div className="footer">
-
           <img src={logo} className="logo-footer" alt="logo" />
         </div>
 
-
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
       </div>
 
     );
