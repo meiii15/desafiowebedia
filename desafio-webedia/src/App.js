@@ -24,6 +24,8 @@ class App extends Component {
     this.PAGE_SIZE = 7;
     this.ALL = "all";
 
+    this.state = {news:[]};
+
     this.updateNews = (newsResponse) => {
       if(newsResponse.status == "error"){
         return;
@@ -57,7 +59,7 @@ class App extends Component {
 
       this.news = news;
       this.updatePaginationButtons();
-      this.setState({});
+      this.setState({ news : news });
     }
 
     this.showTopHeadLines = (page) => {
@@ -105,20 +107,13 @@ class App extends Component {
       this.paginationButtons = [];
       
       for(var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++){
-        let isSelected = false;
+        let isSelected = currentButtonIndex == this.currentPage;
         
-        if(currentButtonIndex == this.currentPage)
-        {
-          isSelected = true;
-        }
-
-        let buttonClassName = "page ";
-        buttonClassName += isSelected ? "active" : "";
-
+        let buttonClassName = "page " + ( isSelected ? "active" : "" );
+        
         let pageIndex = currentButtonIndex;
 
         this.paginationButtons.push({ 
-          index: pageIndex,
           render: () => 
           <li>
             <a id="p1" className={buttonClassName} href="#" onClick={ () => this.goToPage(pageIndex) }>{pageIndex + 1}</a>
@@ -168,7 +163,7 @@ class App extends Component {
         
         <div className="grid-center">
           <div className="grid-container">
-            { this.news.map((currentNew) => currentNew.render() ) }
+            { this.state.news.map((currentNew) => currentNew.render() ) }
           </div>
         </div>
 
