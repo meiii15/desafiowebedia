@@ -19,55 +19,55 @@ class App extends Component {
     this.paginationButtons = [];
     this.currentPage = 0;
     this.currentCountry = "";
-    
+
     this.MAX_PAGES = 5;
     this.PAGE_SIZE = 7;
     this.ALL = "all";
 
-    this.state = {news:[]};
+    this.state = { news: [] };
 
     this.updateNews = (newsResponse) => {
-      if(newsResponse.status == "error"){
+      if (newsResponse.status == "error") {
         return;
       }
-      
+
       var news = [];
-      
+
       var largerCount = 0;
       var isLarger = true;
 
-      for(var currentNewData  of newsResponse.articles)
-      {
+      for (var currentNewData of newsResponse.articles) {
         let cardClass = "normal";
-        
-        if(isLarger && (!(largerCount % 2 == 0) || largerCount == 0)){
+
+        if (isLarger && (!(largerCount % 2 == 0) || largerCount == 0)) {
           cardClass = "larger";
-        }else if(largerCount % 3 == 0){  
+        } else if (largerCount % 3 == 0) {
           largerCount = 0;
           isLarger = true;
-          cardClass = "larger";          
-        }else if(isLarger){
+          cardClass = "larger";
+        } else if (isLarger) {
           largerCount = 0;
           isLarger = false;
         }
-        
-        largerCount ++;
-        
-        var currentNew = new New(currentNewData, cardClass);
-        news.push(currentNew);
+
+        largerCount++;
+
+        currentNewData.cardClass = cardClass;
+
+        news.push(currentNewData);
       }
 
       this.news = news;
       this.updatePaginationButtons();
-      this.setState({ news : news });
+      this.setState({ news: news });
     }
 
     this.showTopHeadLines = (page) => {
       var countries = [
-        {'country': 'us'},
-        {'country': 'fr'},
-        {'country': 'br'},
-        {'country': 'ar'}
+        { 'country': 'us' },
+        { 'country': 'fr' },
+        { 'country': 'br' },
+        { 'country': 'ar' }
       ];
 
       this.currentCountry = this.ALL;
@@ -80,44 +80,44 @@ class App extends Component {
     this.showNewsFrom = (country) => {
       this.currentCountry = country;
       this.currentPage = 0;
-      
+
       this.apiClient.getNewsFrom(country, this.PAGE_SIZE, this.currentPage)
-      .then(response=> response.json())  
-      .then(this.updateNews);
+        .then(response => response.json())
+        .then(this.updateNews);
     }
 
     this.goToPage = (page) => {
       this.currentPage = page;
-      
+
       //A PAGINAÇÃO DA API NÃO COMEÇA A PARTIR DO ZERO
       let selectedPage = this.currentPage + 1;
 
-      if(this.currentCountry == this.ALL){
+      if (this.currentCountry == this.ALL) {
         this.showTopHeadLines(selectedPage);
         return;
       }
-      
-      
+
+
       this.apiClient.getNewsFrom(this.currentCountry, this.PAGE_SIZE, selectedPage)
-      .then(response=> response.json())  
-      .then(this.updateNews);
+        .then(response => response.json())
+        .then(this.updateNews);
     }
 
     this.updatePaginationButtons = () => {
       this.paginationButtons = [];
-      
-      for(var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++){
+
+      for (var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++) {
         let isSelected = currentButtonIndex == this.currentPage;
-        
-        let buttonClassName = "page " + ( isSelected ? "active" : "" );
-        
+
+        let buttonClassName = "page " + (isSelected ? "active" : "");
+
         let pageIndex = currentButtonIndex;
 
-        this.paginationButtons.push({ 
-          render: () => 
-          <li>
-            <a id="p1" className={buttonClassName} href="#" onClick={ () => this.goToPage(pageIndex) }>{pageIndex + 1}</a>
-          </li>
+        this.paginationButtons.push({
+          render: () =>
+            <li>
+              <a id="p1" className={buttonClassName} href="#" onClick={() => this.goToPage(pageIndex)}>{pageIndex + 1}</a>
+            </li>
         });
       }
     }
@@ -126,63 +126,75 @@ class App extends Component {
   }
 
   render() {
-    
-    for(var buttonIndex = 0; buttonIndex < 5; )
-    
-    return (
-      <div className="App">
-        {/*HEADER*/}
-        
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+
+    for (var buttonIndex = 0; buttonIndex < 5;)
+
+      return (
+        <div className="App">
+          {/*HEADER*/}
+
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
 
 
-          {/* SEARCH-INPUT */}
-          
-          <div className="App-Search">
-            <div className="App-Input">
-              <input type="text" placeholder="Search.." />
-              <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+            {/* SEARCH-INPUT */}
+
+            <div className="App-Search">
+              <div className="App-Input">
+                <input type="text" placeholder="Search.." />
+                <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+              </div>
+            </div>
+
+          </header>
+
+
+          {/* MENU */}
+
+          <div className="navbar">
+            <a href="#noticiasemdestaque" className="active" onClick={() => this.showTopHeadLines(1)}>NOTÍCIAS EM DESTAQUE</a>
+            <a href="#noticiasdobrasil" onClick={() => this.showNewsFrom('br')}>NOTÍCIAS DO BRASIL</a>
+            <a href="#noticiasdoeua" onClick={() => this.showNewsFrom('us')}>NOTÍCIAS DO EUA</a>
+            <a href="#noticiasdaargentina" onClick={() => this.showNewsFrom('ar')}>NOTÍCIAS DA ARGENTINA</a>
+            <a href="#noticiasdafrança" onClick={() => this.showNewsFrom('fr')}>NOTÍCIAS DA FRANÇA</a>
+          </div>
+
+          {/* GRID */}
+
+          <div className="grid-center">
+            <div className="grid-container">
+              {this.state
+                .news
+                .map((currentNew) =>
+                  <New
+                    urlToImage={currentNew.urlToImage}
+                    title={currentNew.title}
+                    publishedAt={currentNew.publishedAt}
+                    description={currentNew.description}
+                    author={currentNew.author}
+                    url={currentNew.url}
+                    cardClass={currentNew.cardClass}>
+                  </New>)
+              }
             </div>
           </div>
-          
-        </header>
 
+          {/* PAGINATION */}
 
-        {/* MENU */}
+          <nav className="pages">
+            <ul>
+              {this.paginationButtons.map(pageButton => pageButton.render())}
+            </ul>
+          </nav>
 
-        <div className="navbar">
-          <a href="#noticiasemdestaque" className="active" onClick={() => this.showTopHeadLines(1) }>NOTÍCIAS EM DESTAQUE</a>
-          <a href="#noticiasdobrasil" onClick={()=> this.showNewsFrom('br')}>NOTÍCIAS DO BRASIL</a>
-          <a href="#noticiasdoeua" onClick={()=> this.showNewsFrom('us')}>NOTÍCIAS DO EUA</a>
-          <a href="#noticiasdaargentina" onClick={()=> this.showNewsFrom('ar')}>NOTÍCIAS DA ARGENTINA</a>
-          <a href="#noticiasdafrança" onClick={()=> this.showNewsFrom('fr')}>NOTÍCIAS DA FRANÇA</a>
-        </div>
-        
-        {/* GRID */}
-        
-        <div className="grid-center">
-          <div className="grid-container">
-            { this.state.news.map((currentNew) => currentNew.render() ) }
+          {/* FOOTER */}
+          <div className="footer">
+            <img src={logo} className="logo-footer" alt="logo" />
           </div>
+
         </div>
 
-        {/* PAGINATION */}
-
-        <nav className="pages">
-          <ul>
-            {this.paginationButtons.map(pageButton => pageButton.render())}
-          </ul>
-        </nav>
-        
-        {/* FOOTER */}
-        <div className="footer">
-          <img src={logo} className="logo-footer" alt="logo" />
-        </div>
-
-      </div>
-
-    );
+      );
   }
 }
 
