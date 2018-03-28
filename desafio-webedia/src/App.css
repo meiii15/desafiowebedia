@@ -45,16 +45,31 @@
 }
 
 .App-Search{
+  display: -ms-flexbox;
+  display: flex;
   float: right;
-  }
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  height: 44px;
+  border-radius: 60px;
+  background: whitesmoke;
+  -webkit-box-shadow: 0px 5px #0c0a0c0a;
+  box-shadow: 0px 5px #0c0a0c0a;
+  position: fixed;
+  top: 23px;
+  right: 180px;
+}
 
-.App-Input[type=text]{
-  padding: 6px;
-  margin-top: 8px;
+.App-Input{
   font-size: 17px;
   border: none;
-  border-radius: 60px;
-  box-shadow: 0px 5px #0c0a0c0a;
+  display: flex;
+}
+
+.App-Input>input{
+  border:none;
+  background: transparent;
+  padding:10px;
 }
 
 .Search-Button {
@@ -83,12 +98,12 @@
 }
 
 .grid-container {
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  /* grid-template-columns: auto auto auto auto; */
-  grid-gap: 10px;
-  padding: 10px;
   margin: 140px 180px 0 180px;
+  justify-content: center;
 }
 
 .grid-container>a {

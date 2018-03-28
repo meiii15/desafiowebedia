@@ -145,8 +145,10 @@ class App extends Component {
           {/* SEARCH-INPUT */}
           
           <div className="App-Search">
-            <input className="App-Input" type="text" placeholder="Search.." />
-            <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+            <div className="App-Input">
+              <input type="text" placeholder="Search.." />
+              <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+            </div>
           </div>
           
         </header>
