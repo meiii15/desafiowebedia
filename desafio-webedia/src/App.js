@@ -15,16 +15,24 @@ class App extends Component {
 
     this.apiClient = new ApiClient();
 
-    this.news = [];
-    this.paginationButtons = [];
-    this.currentPage = 0;
-    this.currentCountry = "";
-
     this.MAX_PAGES = 5;
     this.PAGE_SIZE = 7;
     this.ALL = "all";
-
-    this.state = { news: [] };
+    this.countries = [
+      {initials:"all", label: "NOTÍCIAS EM DESTAQUE"},
+      {initials:"br", label:"NOTÍCIAS DO BRASIL"},
+      {initials:"us", label:"NOTÍCIAS DOS ESTADOS UNIDOS"},
+      {initials:"ar", label:"NOTÍCIAS DA ARGENTINA"},
+      {initials:"fr", label:"NOTÍCIAS DA FRANÇA"}
+    ]
+    
+    this.state = { 
+      currentCountry: "all",
+      currentPage: 0,
+      paginationButtons: [],
+      countryButtons: [],
+      news: [] 
+    };
 
     this.updateNews = (newsResponse) => {
       if (newsResponse.status == "error") {
@@ -57,8 +65,13 @@ class App extends Component {
         news.push(currentNewData);
       }
 
-      this.updatePaginationButtons();
-      this.setState({ news: news });
+      var paginationButtons = this.updatePaginationButtons();
+      var countryButtons = this.updateCountryButtons();
+      this.setState({ 
+        news: news,
+        countryButtons: countryButtons,
+        paginationButtons: paginationButtons
+      });
     }
 
     this.showTopHeadLines = (page) => {
@@ -68,10 +81,11 @@ class App extends Component {
         { 'country': 'br' },
         { 'country': 'ar' }
       ];
-
-      this.currentCountry = this.ALL;
-
-      this.setState({news : []});
+      
+      this.setState({
+        currentCountry:"all",
+        news : []}
+      );
 
       this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page)
         .then(response => response.json())
@@ -79,10 +93,17 @@ class App extends Component {
     }
 
     this.showNewsFrom = (country) => {
-      this.currentCountry = country;
-      this.currentPage = 0;
-
-      this.setState({news:[]});
+      
+      if(country == this.ALL){
+        this.showTopHeadLines();
+        return;
+      }
+      
+      this.setState({
+        currentPage: 0,
+        currentCountry: country,
+        news:[]
+      });
 
       this.apiClient.getNewsFrom(country, this.PAGE_SIZE, this.currentPage)
         .then(response => response.json())
@@ -90,39 +111,55 @@ class App extends Component {
     }
 
     this.goToPage = (page) => {
-      this.currentPage = page;
+      this.setState({currentPage:page})
 
       //A PAGINAÇÃO DA API NÃO COMEÇA A PARTIR DO ZERO
-      let selectedPage = this.currentPage + 1;
-
-      if (this.currentCountry == this.ALL) {
+      let selectedPage = page + 1;
+      
+      if (this.state.currentCountry == this.ALL) {
         this.showTopHeadLines(selectedPage);
         return;
       }
 
 
-      this.apiClient.getNewsFrom(this.currentCountry, this.PAGE_SIZE, selectedPage)
+      this.apiClient.getNewsFrom(this.state.currentCountry, this.PAGE_SIZE, selectedPage)
         .then(response => response.json())
         .then(this.updateNews);
     }
 
     this.updatePaginationButtons = () => {
-      this.paginationButtons = [];
+      var paginationButtons = [];
 
       for (var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++) {
-        let isSelected = currentButtonIndex == this.currentPage;
-
+        let isSelected = currentButtonIndex == this.state.currentPage;
+        
         let buttonClassName = "page " + (isSelected ? "active" : "");
-
         let pageIndex = currentButtonIndex;
 
-        this.paginationButtons.push({
-          render: () =>
-            <li>
-              <a id="p1" className={buttonClassName} href="#" onClick={() => this.goToPage(pageIndex)}>{pageIndex + 1}</a>
-            </li>
+        paginationButtons.push({
+          buttonClassName:buttonClassName,
+          pageIndex:pageIndex
         });
       }
+
+      return paginationButtons;
+    }
+
+    this.updateCountryButtons = () => {
+      var countryButtons = [];
+
+      for (var currentCountry of this.countries)
+      {
+        var isSelected = this.state.currentCountry === currentCountry.initials ? "active":"";
+
+        countryButtons.push({
+          initials: currentCountry.initials,
+          label: currentCountry.label,
+          isSelected: isSelected
+        });
+      }
+
+      return countryButtons;
     }
 
     this.showTopHeadLines();
@@ -151,15 +188,17 @@ class App extends Component {
 
           </header>
 
-
-          {/* MENU */}
-
           <div className="navbar">
-            <a href="#noticiasemdestaque" className="active" onClick={() => this.showTopHeadLines(1)}>NOTÍCIAS EM DESTAQUE</a>
-            <a href="#noticiasdobrasil" onClick={() => this.showNewsFrom('br')}>NOTÍCIAS DO BRASIL</a>
-            <a href="#noticiasdoeua" onClick={() => this.showNewsFrom('us')}>NOTÍCIAS DO EUA</a>
-            <a href="#noticiasdaargentina" onClick={() => this.showNewsFrom('ar')}>NOTÍCIAS DA ARGENTINA</a>
-            <a href="#noticiasdafrança" onClick={() => this.showNewsFrom('fr')}>NOTÍCIAS DA FRANÇA</a>
+            {
+              this.state.countryButtons.map((currentCountry) =>
+                <a 
+                  href="#noticiasemdestaque" 
+                  className={currentCountry.isSelected} 
+                  onClick={() => this.showNewsFrom(currentCountry.initials)}>
+                    {currentCountry.label}
+                </a>
+              )
+            }
           </div>
 
           {/* GRID */}
@@ -186,7 +225,12 @@ class App extends Component {
 
           <nav className="pages">
             <ul>
-              {this.paginationButtons.map(pageButton => pageButton.render())}
+              {this.state.paginationButtons.map((currentButton) => 
+                <li>
+                  <a  className={currentButton.buttonClassName} 
+                      href="#" 
+                      onClick={() => this.goToPage(currentButton.pageIndex)}>{currentButton.pageIndex + 1}</a>
+                </li>)}
             </ul>
           </nav>
 

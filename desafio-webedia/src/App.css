@@ -39,6 +39,10 @@
   font-size: 17px;
 }
 
+.navbar a.active{
+  color: #f1f1f1;;
+}
+
 .navbar a:hover {
   background: #f1f1f1;
   color: black;
