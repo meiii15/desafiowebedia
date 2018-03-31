@@ -57,7 +57,6 @@ class App extends Component {
         news.push(currentNewData);
       }
 
-      this.news = news;
       this.updatePaginationButtons();
       this.setState({ news: news });
     }
@@ -72,14 +71,18 @@ class App extends Component {
 
       this.currentCountry = this.ALL;
 
+      this.setState({news : []});
+
       this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page)
         .then(response => response.json())
-        .then(this.updateNews)
+        .then(this.updateNews);
     }
 
     this.showNewsFrom = (country) => {
       this.currentCountry = country;
       this.currentPage = 0;
+
+      this.setState({news:[]});
 
       this.apiClient.getNewsFrom(country, this.PAGE_SIZE, this.currentPage)
         .then(response => response.json())
