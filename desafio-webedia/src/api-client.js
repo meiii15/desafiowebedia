@@ -1,7 +1,7 @@
 export default class ApiClient{
     constructor(){
         
-        this.API_KEY = 'ac1d68b586734bf2bc4d2e0bd3b34323';
+        this.API_KEY = '6f1fe183b964432cb4b664cb3f0f6cb9';
 
         this.getNewsFrom = function(country, pageSize, page)
         {
