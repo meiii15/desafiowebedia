@@ -5,6 +5,8 @@ import ApiClient from './api-client';
 
 import logo from './brand.png';
 import search from './search.png';
+import hamburguer from './imgs/Hamburger_icon.png';
+import closeIcon from './imgs/close_icon.png'
 
 import './App.css';
 
@@ -18,15 +20,18 @@ class App extends Component {
     this.MAX_PAGES = 5;
     this.PAGE_SIZE = 7;
     this.ALL = "all";
-    this.countries = [
+    this.MOBILE_WIDTH = 1000;
+    this.COUNTRIES = [
       {initials:"all", label: "NOTÍCIAS EM DESTAQUE"},
       {initials:"br", label:"NOTÍCIAS DO BRASIL"},
       {initials:"us", label:"NOTÍCIAS DOS ESTADOS UNIDOS"},
       {initials:"ar", label:"NOTÍCIAS DA ARGENTINA"},
       {initials:"fr", label:"NOTÍCIAS DA FRANÇA"}
-    ]
+    ];
     
     this.state = { 
+      isMobile: window.innerWidth < this.MOBILE_WIDTH,
+      navBarVisible: false,
       currentCountry: "all",
       currentPage: 0,
       paginationButtons: [],
@@ -148,7 +153,7 @@ class App extends Component {
     this.updateCountryButtons = () => {
       var countryButtons = [];
 
-      for (var currentCountry of this.countries)
+      for (var currentCountry of this.COUNTRIES)
       {
         var isSelected = this.state.currentCountry === currentCountry.initials ? "active":"";
 
@@ -162,7 +167,29 @@ class App extends Component {
       return countryButtons;
     }
 
+    this.toggleNavBar = () => {      
+      var navBarVisibility = !this.state.navBarVisible;
+      this.setState({navBarVisible:navBarVisibility});
+    }
+
     this.showTopHeadLines();
+  }
+
+  onResize(){
+    if(this.state.isMobile && window.innerWidth > this.MOBILE_WIDTH){
+      this.setState({isMobile:false});
+    }else if(!this.state.isMobile && window.innerWidth < this.MOBILE_WIDTH){
+      this.setState({isMobile:true})
+    }
+  }
+
+  componentDidMount() {
+    this.onResize();
+    window.addEventListener("resize", this.onResize.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize.bind(this));
   }
 
   render() {
@@ -174,33 +201,48 @@ class App extends Component {
           {/*HEADER*/}
 
           <header className="App-header">
+            <img src={hamburguer} className="menu-button" onClick={()=>{this.toggleNavBar();}} />
+            
             <img src={logo} className="App-logo" alt="logo" />
 
 
             {/* SEARCH-INPUT */}
 
-            <div className="App-Search">
-              <div className="App-Input">
-                <input type="text" placeholder="Search.." />
-                <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+            {this.state.isMobile &&
+              <div className="App-Search">
+                <div className="App-Input">
+                  <input type="text" placeholder="Search.." />
+                  <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+                </div>
               </div>
-            </div>
-
+            }
           </header>
 
-          <div className="navbar">
-            {
-              this.state.countryButtons.map((currentCountry) =>
-                <a 
-                  href="#noticiasemdestaque" 
-                  className={currentCountry.isSelected} 
-                  onClick={() => this.showNewsFrom(currentCountry.initials)}>
-                    {currentCountry.label}
-                </a>
-              )
+          { 
+            (this.state.navBarVisible || !this.state.isMobile) &&              
+              <div className="navbar">
+                {
+                  this.state.countryButtons.map((currentCountry) =>
+                    <a 
+                      className={currentCountry.isSelected} 
+                      onClick={() => this.showNewsFrom(currentCountry.initials)}>
+                        {currentCountry.label}
+                    </a>
+                  )
+                }
+              </div>
             }
-          </div>
 
+            {
+              (this.state.isMobile && this.state.navBarVisible) && 
+                <div className="mobile-menu-backgroud">
+                  <img 
+                    src={closeIcon}
+                    className ="close-navbar-button" 
+                    onClick={() => { this.toggleNavBar(); }}/>
+                </div>
+            }
+            
           {/* GRID */}
 
           <div className="grid-center">

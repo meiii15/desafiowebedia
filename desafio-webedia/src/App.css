@@ -2,37 +2,134 @@
   text-align: center;
 }
 
-.App-logo {
+@media screen and (min-width : 1000px){
+  .navbar {
+    overflow: hidden;
+    background-color: #fffeff;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    -webkit-box-shadow: 0px 3px #0c0a0c0a;
+    box-shadow: 0px 3px #0c0a0c0a;
+    top: 80px;
+  }
+  
+  .App-Search{
+    display: -ms-flexbox;
+    display: flex;
+    float: right;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    height: 44px;
+    border-radius: 60px;
+    background: whitesmoke;
+    -webkit-box-shadow: 0px 5px #0c0a0c0a;
+    box-shadow: 0px 5px #0c0a0c0a;
+    position: fixed;
+    top: 23px;
+    right: 180px;
+  }
+
+  .grid-container {
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 140px 180px 0 180px;
+    justify-content: center;
+  }
+  
+  .grid-container>a.larger{
+    width: 50%;
+  }
+  
+  .grid-container>a.normal{
+    width: 33%;
+  }
+
+  .menu-button{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1000px){
+  .grid-container{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+  }
+
+  .navbar {
+    overflow: hidden;
+    background-color: #fffeff;
+    position: fixed;
+    display: flex;
+    flex-flow: column;
+    justify-content: start;
+    -webkit-box-shadow: 0px 3px #0c0a0c0a;
+    box-shadow: 0px 3px #0c0a0c0a;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .menu-button{
+    height: 50px;
+    background-size: auto 50px;
+    right: 0px;
+    top: 0;
+    margin: 10px;
+    left: 0px;
+    position: fixed;
+  }
+  
+  .grid-container{
+    margin-top: 62px;
+  }
+}
+
+.close-navbar-button{
+  position:fixed;
+  top:0px;
+  right:0px;
+  margin:10px;
+  background-color: #fffeff;
+  border-radius: 50%;
+  width:75px;
+  height:75px;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.mobile-menu-backgroud{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background-color: rgba(0, 0, 0, 0.5)
+}
+
+.App-logo{
   height: 40px;
+  margin: 10px;
+  position: fixed;
+  top: 0px;
 }
 
 .App-header {
-  height: 80px;
+  height: 30px;
   padding: 20px;
-  /* color: #d5d5d5; */
   background: #f1eff1;
   position: fixed;
-  width: 100%;
-}
-
-.navbar {
-  overflow: hidden;
-  background-color: #fffeff;
-  position: fixed;
-  width: 100%;
-  display: -ms-flexbox;
+  width: 100%;  
   display: flex;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-shadow: 0px 3px #0c0a0c0a;
-  box-shadow: 0px 3px #0c0a0c0a;
-  top: 80px;
+  justify-content: space-around;
 }
 
 .navbar a {
   float: left;
   display: block;
-  color: #7ca3d2;;
+  color: #7ca3d2;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -46,22 +143,6 @@
 .navbar a:hover {
   background: #f1f1f1;
   color: black;
-}
-
-.App-Search{
-  display: -ms-flexbox;
-  display: flex;
-  float: right;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  height: 44px;
-  border-radius: 60px;
-  background: whitesmoke;
-  -webkit-box-shadow: 0px 5px #0c0a0c0a;
-  box-shadow: 0px 5px #0c0a0c0a;
-  position: fixed;
-  top: 23px;
-  right: 180px;
 }
 
 .App-Input{
@@ -101,27 +182,13 @@
   height: 22px;
 }
 
-.grid-container {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin: 140px 180px 0 180px;
-  justify-content: center;
-}
-
 .grid-container>a {
-  text-align: center;
-  height: 400px;
+  display: flex;
+  -ms-flex-flow: column;
+  flex-flow: column;
+  -ms-flex-pack: center;
+  justify-content: center;
   text-decoration: none;
-}
-
-.grid-container>a.larger{
-  width: 50%;
-}
-
-.grid-container>a.normal{
-  width: 33%;
 }
 
 .new-container{
