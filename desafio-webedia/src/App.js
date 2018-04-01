@@ -208,7 +208,7 @@ class App extends Component {
 
             {/* SEARCH-INPUT */}
 
-            {this.state.isMobile &&
+            {!this.state.isMobile &&
               <div className="App-Search">
                 <div className="App-Input">
                   <input type="text" placeholder="Search.." />
