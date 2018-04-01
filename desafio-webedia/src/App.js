@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import New from './new-component';
+import AppHeader from './app-header-component';
 import ApiClient from './api-client';
 
 import logo from './brand.png';
@@ -22,21 +23,21 @@ class App extends Component {
     this.ALL = "all";
     this.MOBILE_WIDTH = 1000;
     this.COUNTRIES = [
-      {initials:"all", label: "NOTÍCIAS EM DESTAQUE"},
-      {initials:"br", label:"NOTÍCIAS DO BRASIL"},
-      {initials:"us", label:"NOTÍCIAS DOS ESTADOS UNIDOS"},
-      {initials:"ar", label:"NOTÍCIAS DA ARGENTINA"},
-      {initials:"fr", label:"NOTÍCIAS DA FRANÇA"}
+      { initials: "all", label: "NOTÍCIAS EM DESTAQUE" },
+      { initials: "br", label: "NOTÍCIAS DO BRASIL" },
+      { initials: "us", label: "NOTÍCIAS DOS ESTADOS UNIDOS" },
+      { initials: "ar", label: "NOTÍCIAS DA ARGENTINA" },
+      { initials: "fr", label: "NOTÍCIAS DA FRANÇA" }
     ];
-    
-    this.state = { 
+
+    this.state = {
       isMobile: window.innerWidth < this.MOBILE_WIDTH,
       navBarVisible: false,
       currentCountry: "all",
       currentPage: 0,
       paginationButtons: [],
       countryButtons: [],
-      news: [] 
+      news: []
     };
 
     this.updateNews = (newsResponse) => {
@@ -72,7 +73,7 @@ class App extends Component {
 
       var paginationButtons = this.updatePaginationButtons();
       var countryButtons = this.updateCountryButtons();
-      this.setState({ 
+      this.setState({
         news: news,
         countryButtons: countryButtons,
         paginationButtons: paginationButtons
@@ -86,10 +87,11 @@ class App extends Component {
         { 'country': 'br' },
         { 'country': 'ar' }
       ];
-      
+
       this.setState({
-        currentCountry:"all",
-        news : []}
+        currentCountry: "all",
+        news: []
+      }
       );
 
       this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page)
@@ -98,16 +100,16 @@ class App extends Component {
     }
 
     this.showNewsFrom = (country) => {
-      
-      if(country == this.ALL){
+
+      if (country == this.ALL) {
         this.showTopHeadLines();
         return;
       }
-      
+
       this.setState({
         currentPage: 0,
         currentCountry: country,
-        news:[]
+        news: []
       });
 
       this.apiClient.getNewsFrom(country, this.PAGE_SIZE, this.currentPage)
@@ -116,11 +118,11 @@ class App extends Component {
     }
 
     this.goToPage = (page) => {
-      this.setState({currentPage:page})
+      this.setState({ currentPage: page })
 
       //A PAGINAÇÃO DA API NÃO COMEÇA A PARTIR DO ZERO
       let selectedPage = page + 1;
-      
+
       if (this.state.currentCountry == this.ALL) {
         this.showTopHeadLines(selectedPage);
         return;
@@ -137,13 +139,13 @@ class App extends Component {
 
       for (var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++) {
         let isSelected = currentButtonIndex == this.state.currentPage;
-        
+
         let buttonClassName = "page " + (isSelected ? "active" : "");
         let pageIndex = currentButtonIndex;
 
         paginationButtons.push({
-          buttonClassName:buttonClassName,
-          pageIndex:pageIndex
+          buttonClassName: buttonClassName,
+          pageIndex: pageIndex
         });
       }
 
@@ -153,9 +155,8 @@ class App extends Component {
     this.updateCountryButtons = () => {
       var countryButtons = [];
 
-      for (var currentCountry of this.COUNTRIES)
-      {
-        var isSelected = this.state.currentCountry === currentCountry.initials ? "active":"";
+      for (var currentCountry of this.COUNTRIES) {
+        var isSelected = this.state.currentCountry === currentCountry.initials ? "active" : "";
 
         countryButtons.push({
           initials: currentCountry.initials,
@@ -167,123 +168,79 @@ class App extends Component {
       return countryButtons;
     }
 
-    this.toggleNavBar = () => {      
+    this.toggleNavBar = () => {
       var navBarVisibility = !this.state.navBarVisible;
-      this.setState({navBarVisible:navBarVisibility});
+      this.setState({ navBarVisible: navBarVisibility });
     }
 
     this.showTopHeadLines();
   }
 
-  onResize(){
-    if(this.state.isMobile && window.innerWidth > this.MOBILE_WIDTH){
-      this.setState({isMobile:false});
-    }else if(!this.state.isMobile && window.innerWidth < this.MOBILE_WIDTH){
-      this.setState({isMobile:true})
-    }
-  }
+  // onResize() {
+  //   if (this.state.isMobile && window.innerWidth > this.MOBILE_WIDTH) {
+  //     this.setState({ isMobile: false });
+  //   } else if (!this.state.isMobile && window.innerWidth < this.MOBILE_WIDTH) {
+  //     this.setState({ isMobile: true })
+  //   }
+  // }
 
-  componentDidMount() {
-    this.onResize();
-    window.addEventListener("resize", this.onResize.bind(this));
-  }
+  // componentDidMount() {
+  //   this.onResize();
+  //   window.addEventListener("resize", this.onResize.bind(this));
+  // }
 
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.onResize.bind(this));
-  }
+  // componentWillUnmount() {
+  //   window.removeEventListener("resize", this.onResize.bind(this));
+  // }
 
   render() {
+    return (
+      <div className="App">
+        {/*HEADER*/}
 
-    for (var buttonIndex = 0; buttonIndex < 5;)
+        <AppHeader />
 
-      return (
-        <div className="App">
-          {/*HEADER*/}
+        {/* GRID */}
 
-          <header className="App-header">
-            <img src={hamburguer} className="menu-button" onClick={()=>{this.toggleNavBar();}} />
-            
-            <img src={logo} className="App-logo" alt="logo" />
-
-
-            {/* SEARCH-INPUT */}
-
-            {!this.state.isMobile &&
-              <div className="App-Search">
-                <div className="App-Input">
-                  <input type="text" placeholder="Search.." />
-                  <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
-                </div>
-              </div>
+        <div className="grid-center">
+          <div className="grid-container">
+            {this.state
+              .news
+              .map((currentNew) =>
+                <New
+                  urlToImage={currentNew.urlToImage}
+                  title={currentNew.title}
+                  publishedAt={currentNew.publishedAt}
+                  description={currentNew.description}
+                  author={currentNew.author}
+                  url={currentNew.url}
+                  cardClass={currentNew.cardClass}>
+                </New>)
             }
-          </header>
-
-          { 
-            (this.state.navBarVisible || !this.state.isMobile) &&              
-              <div className="navbar">
-                {
-                  this.state.countryButtons.map((currentCountry) =>
-                    <a 
-                      className={currentCountry.isSelected} 
-                      onClick={() => this.showNewsFrom(currentCountry.initials)}>
-                        {currentCountry.label}
-                    </a>
-                  )
-                }
-              </div>
-            }
-
-            {
-              (this.state.isMobile && this.state.navBarVisible) && 
-                <div className="mobile-menu-backgroud">
-                  <img 
-                    src={closeIcon}
-                    className ="close-navbar-button" 
-                    onClick={() => { this.toggleNavBar(); }}/>
-                </div>
-            }
-            
-          {/* GRID */}
-
-          <div className="grid-center">
-            <div className="grid-container">
-              {this.state
-                .news
-                .map((currentNew) =>
-                  <New
-                    urlToImage={currentNew.urlToImage}
-                    title={currentNew.title}
-                    publishedAt={currentNew.publishedAt}
-                    description={currentNew.description}
-                    author={currentNew.author}
-                    url={currentNew.url}
-                    cardClass={currentNew.cardClass}>
-                  </New>)
-              }
-            </div>
           </div>
-
-          {/* PAGINATION */}
-
-          <nav className="pages">
-            <ul>
-              {this.state.paginationButtons.map((currentButton) => 
-                <li>
-                  <a  className={currentButton.buttonClassName} 
-                      href="#" 
-                      onClick={() => this.goToPage(currentButton.pageIndex)}>{currentButton.pageIndex + 1}</a>
-                </li>)}
-            </ul>
-          </nav>
-
-          {/* FOOTER */}
-          <div className="footer">
-            <img src={logo} className="logo-footer" alt="logo" />
-          </div>
-
         </div>
 
-      );
+        {/* PAGINATION */}
+
+        <nav className="pages">
+          <ul>
+            {this.state.paginationButtons.map((currentButton) =>
+              <li>
+                <a className={currentButton.buttonClassName}
+                  href="#"
+                  onClick={() => this.goToPage(currentButton.pageIndex)}>{currentButton.pageIndex + 1}</a>
+              </li>)}
+          </ul>
+        </nav>
+
+        {/* FOOTER */}
+        <div className="footer">
+          <img src={logo} className="logo-footer" alt="logo" />
+        </div>
+
+      </div>
+
+    );
   }
 }
 

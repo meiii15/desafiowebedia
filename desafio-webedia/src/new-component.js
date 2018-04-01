@@ -21,17 +21,17 @@ export default class New extends Component{
     render(){
         return (
         <a href={this.state.url} className={this.state.cardClass} target="_blank">
-            <div className="new-container">
-                <div className="new-image">
+            <header className="new-container">
+                <header className="new-image">
                     <img src={this.state.image}/> 
-                </div>
-                <div className="new-info">
+                </header>
+                <header className="new-info">
                     <span className="new-publish-date"> {this.state.date} </span>
                     <h3> {this.state.title} </h3>
-                    <div className="new-description"> {this.state.content} </div>
+                    <header className="new-description"> {this.state.content} </header>
                     <span className="new-author"> {this.state.author} </span>
-                </div>
-            </div>
+                </header>
+            </header>
         </a>)
     }
 }
