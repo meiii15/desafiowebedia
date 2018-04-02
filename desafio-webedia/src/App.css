@@ -89,6 +89,10 @@
   }
 }
 
+.grid-container{
+  margin-bottom: 30px;
+}
+
 .close-navbar-button{
   position:fixed;
   top:0px;

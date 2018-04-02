@@ -10,8 +10,6 @@ export default class AppHeader extends Component {
   constructor(props) {
     super();
 
-    debugger;
-
     this.MOBILE_WIDTH = 1000;
     this.COUNTRIES = [
       { initials: "all", label: "NOTÍCIAS EM DESTAQUE", urlParam: "all" },
@@ -23,7 +21,7 @@ export default class AppHeader extends Component {
 
     this.state = {
       currentCountry: props.match.params.country,
-      navBarVisible: true,
+      navBarVisible: false,
       countryButtons: [],
       isMobile: window.innerWidth < this.MOBILE_WIDTH
     }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 // import New from './new-component';
 import AppHeader from './app-header-component';
 import NewsGrid from './news-grid-component';
+import Pagination from './pagination-component';
 
 import logo from './brand.png';
 import search from './search.png';
@@ -53,21 +54,12 @@ class App extends Component {
             
             {/* GRID */}
             <Route path="/country/:country/page/:page" component={NewsGrid}/>
+            
+            {/* PAGINATION */}
+            <Route path="/country/:country/page/:page" component={Pagination}/>
           </div>
         </Router>
 
-        {/* PAGINATION */}
-
-        <nav className="pages">
-          <ul>
-            {this.state.paginationButtons.map((currentButton) =>
-              <li>
-                <a className={currentButton.buttonClassName}
-                  href="#"
-                  onClick={() => this.goToPage(currentButton.pageIndex)}>{currentButton.pageIndex + 1}</a>
-              </li>)}
-          </ul>
-        </nav>
 
         {/* FOOTER */}
         <div className="footer">
