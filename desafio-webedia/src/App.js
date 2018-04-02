@@ -17,30 +17,6 @@ import './App.css';
 class App extends Component {
   constructor() {
     super();
-
-    this.state = {
-      currentPage: 0,
-      paginationButtons: [],
-    };
-
-    
-    this.updatePaginationButtons = () => {
-      var paginationButtons = [];
-
-      for (var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++) {
-        let isSelected = currentButtonIndex == this.state.currentPage;
-
-        let buttonClassName = "page " + (isSelected ? "active" : "");
-        let pageIndex = currentButtonIndex;
-
-        paginationButtons.push({
-          buttonClassName: buttonClassName,
-          pageIndex: pageIndex
-        });
-      }
-
-      return paginationButtons;
-    }
   }
 
   render() {
@@ -63,7 +39,9 @@ class App extends Component {
 
         {/* FOOTER */}
         <div className="footer">
-          <img src={logo} className="logo-footer" alt="logo" />
+          <a href="http://jobs.webedia.group/frontend">
+            <img src={logo} alt="logo" className="logo-footer"/>
+          </a>
         </div>
 
       </div>
