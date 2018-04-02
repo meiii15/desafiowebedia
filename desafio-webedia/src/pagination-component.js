@@ -9,7 +9,7 @@ export default class Pagination extends Component {
         this.updatePaginationButtons = (currentPage, country) => {
             var paginationButtons = [];
 
-            for (var currentButtonIndex = 0; currentButtonIndex < this.MAX_PAGES; currentButtonIndex++) {
+            for (var currentButtonIndex = 1; currentButtonIndex <= this.MAX_PAGES; currentButtonIndex++) {
                 let isSelected = currentButtonIndex == currentPage;
 
                 let buttonClassName = "page " + (isSelected ? "active" : "");
@@ -38,7 +38,7 @@ export default class Pagination extends Component {
                         <li>
                             <a className={currentButton.buttonClassName}
                                 href={currentButton.url}>
-                                {currentButton.pageIndex + 1}
+                                {currentButton.pageIndex}
                             </a>
                         </li>)}
                 </ul>
