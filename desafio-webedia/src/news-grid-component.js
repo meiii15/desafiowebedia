@@ -71,12 +71,11 @@ export default class NewsGrid extends Component {
         this.showNewsFrom = (country, page) => {
 
             if (country == this.ALL) {
-                this.showTopHeadLines();
+                this.showTopHeadLines(page);
                 return;
             }
 
             this.setState({
-                currentPage: 0,
                 currentCountry: country,
                 news: []
             });
