@@ -26,9 +26,9 @@ export default class New extends Component{
                     <img src={this.state.image}/> 
                 </header>
                 <header className="new-info">
-                    <span className="new-publish-date"> {this.state.date} </span>
+                    <span className="publish-date"> {this.state.date} </span>
                     <h3> {this.state.title} </h3>
-                    <header className="new-description"> {this.state.content} </header>
+                    <div className="new-description"> {this.state.content} </div>
                     <span className="new-author"> {this.state.author} </span>
                 </header>
             </header>

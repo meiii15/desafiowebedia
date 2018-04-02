@@ -12,7 +12,7 @@
     justify-content: center;
     -webkit-box-shadow: 0px 3px #0c0a0c0a;
     box-shadow: 0px 3px #0c0a0c0a;
-    top: 80px;
+    top: 70px;
   }
   
   .App-Search{
@@ -27,7 +27,7 @@
     -webkit-box-shadow: 0px 5px #0c0a0c0a;
     box-shadow: 0px 5px #0c0a0c0a;
     position: fixed;
-    top: 23px;
+    top: 12px;
     right: 180px;
   }
 
@@ -117,8 +117,7 @@
 }
 
 .App-header {
-  height: 30px;
-  padding: 20px;
+  height: 70px;
   background: #f1eff1;
   position: fixed;
   width: 100%;  
@@ -233,7 +232,7 @@
   color: #9bb7db;
   margin:5px;
 }
-
+.new-info .publish-date , 
 .new-info>div{
   font-size:12px;
   color:#c6c6c6;

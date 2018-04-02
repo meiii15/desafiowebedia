@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
 import logo from './brand.png';
 import search from './search.png';
 import hamburguer from './imgs/Hamburger_icon.png';
@@ -34,7 +36,7 @@ export default class AppHeader extends Component {
           initials: currentCountry.initials,
           label: currentCountry.label,
           isSelected: isSelected,
-          url: "#?country=" + currentCountry.urlParam
+          url: "/country/" + currentCountry.urlParam + "/page/0"
         });
       }
 
@@ -94,10 +96,10 @@ export default class AppHeader extends Component {
           <div className="navbar">
             {
               this.state.countryButtons.map((currentCountry) =>
-                <a
-                  className={currentCountry.isSelected}
-                  href={currentCountry.url}>
-                  {currentCountry.label}
+                
+                <a href={currentCountry.url}
+                  className={currentCountry.isSelected}>
+                    {currentCountry.label}
                 </a>
               )
             }
