@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 
 // import New from './new-component';
 import AppHeader from './app-header-component';
@@ -25,6 +25,10 @@ class App extends Component {
         
         <Router>
           <div>
+            <Route exact path="/" render={() => (
+                <Redirect to="/country/all/page/0"/>
+            )}/>
+            
             {/*HEADER*/}
             <Route path="/country/:country/*" component={AppHeader}/>
             
