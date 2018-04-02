@@ -26,7 +26,7 @@ class App extends Component {
         <Router>
           <div>
             <Route exact path="/" render={() => (
-                <Redirect to="/country/all/page/0"/>
+                <Redirect to="/country/all/page/1"/>
             )}/>
             
             {/*HEADER*/}
