@@ -57,12 +57,6 @@ export default class NewsGrid extends Component {
                 { 'country': 'ar' }
             ];
 
-            this.setState({
-                currentCountry: "all",
-                news: []
-            }
-            );
-
             this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page)
                 .then(response => response.json())
                 .then(this.updateNews);
@@ -74,11 +68,6 @@ export default class NewsGrid extends Component {
                 this.showTopHeadLines(page);
                 return;
             }
-
-            this.setState({
-                currentCountry: country,
-                news: []
-            });
 
             this.apiClient.getNewsFrom(country, this.PAGE_SIZE, page)
                 .then(response => response.json())

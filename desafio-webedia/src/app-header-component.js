@@ -36,7 +36,7 @@ export default class AppHeader extends Component {
           initials: currentCountry.initials,
           label: currentCountry.label,
           isSelected: isSelected,
-          url: "/country/" + currentCountry.urlParam + "/page/0"
+          url: "/country/" + currentCountry.urlParam + "/page/1"
         });
       }
 
@@ -76,7 +76,9 @@ export default class AppHeader extends Component {
       <header className="App-header">
         <img src={hamburguer} className="menu-button" onClick={() => { this.toggleNavBar(); }} />
 
-        <img src={logo} className="App-logo" alt="logo" />
+        <a href="/country/all/page/1" className="App-logo">
+          <img src={logo} alt="logo"/>
+        </a>
 
 
         {/* SEARCH-INPUT */}
