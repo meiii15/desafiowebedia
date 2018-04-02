@@ -6,7 +6,7 @@ import New from './new-component';
 export default class NewsGrid extends Component {
     constructor(props) {
         super();
-
+        
         this.MAX_PAGES = 5;
         this.PAGE_SIZE = 7;
         this.ALL = "all";

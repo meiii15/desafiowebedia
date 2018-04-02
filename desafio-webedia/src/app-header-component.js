@@ -7,8 +7,10 @@ import hamburguer from './imgs/Hamburger_icon.png';
 import closeIcon from './imgs/close_icon.png'
 
 export default class AppHeader extends Component {
-  constructor() {
+  constructor(props) {
     super();
+
+    debugger;
 
     this.MOBILE_WIDTH = 1000;
     this.COUNTRIES = [
@@ -20,7 +22,7 @@ export default class AppHeader extends Component {
     ];
 
     this.state = {
-      currentCountry: "all",
+      currentCountry: props.match.params.country,
       navBarVisible: true,
       countryButtons: [],
       isMobile: window.innerWidth < this.MOBILE_WIDTH
@@ -95,13 +97,11 @@ export default class AppHeader extends Component {
           (this.state.navBarVisible || !this.state.isMobile) &&
           <div className="navbar">
             {
-              this.state.countryButtons.map((currentCountry) =>
-                
+              this.state.countryButtons.map((currentCountry) => 
                 <a href={currentCountry.url}
                   className={currentCountry.isSelected}>
                     {currentCountry.label}
-                </a>
-              )
+                </a>)
             }
           </div>
         }

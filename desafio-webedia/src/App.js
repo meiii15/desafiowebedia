@@ -45,11 +45,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        
         <Router>
           <div>
             {/*HEADER*/}
-            <AppHeader />
-
+            <Route path="/country/:country/*" component={AppHeader}/>
+            
             {/* GRID */}
             <Route path="/country/:country/page/:page" component={NewsGrid}/>
           </div>
