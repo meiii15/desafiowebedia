@@ -4,7 +4,7 @@ export default class ApiClient{
         /*
          * CHAVE DE ACESSO DA API
          */
-        this.API_KEY = '6f1fe183b964432cb4b664cb3f0f6cb9';
+        this.API_KEY = 'ca62f830997b4077b573fd8a2678a30e';
 
         /**
          * OBTEM NOTÍCIAS DE UM PAÍS
