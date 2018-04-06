@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ApiClient from './api-client';
+import ApiClient from '../api-client';
 
 import New from './new-component';
 
@@ -22,6 +22,9 @@ export default class NewsGrid extends Component {
         this.ALL = "all";
 
         this.apiClient = new ApiClient();
+        this.state = {
+            news:[]
+        };
 
         /**
          * ATUALIZA NOTÍCIAS NA VIEW, ATUALIZA A LISTAGEM

@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 
 // import New from './new-component';
-import AppHeader from './app-header-component';
-import NewsGrid from './news-grid-component';
-import Pagination from './pagination-component';
+import AppHeader from './components/app-header-component';
+import NewsGrid from './components/news-grid-component';
+import Pagination from './components/pagination-component';
 
-import logo from './brand.png';
-import search from './search.png';
-import hamburguer from './imgs/Hamburger_icon.png';
-import closeIcon from './imgs/close_icon.png'
+import logo from './imgs/brand.png';
 
 import './App.css';
 

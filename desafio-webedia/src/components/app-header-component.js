@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import logo from './brand.png';
-import search from './search.png';
-import hamburguer from './imgs/Hamburger_icon.png';
-import closeIcon from './imgs/close_icon.png'
+import logo from '../imgs/brand.png';
+import search from '../imgs/search.png';
+import hamburguer from '../imgs/Hamburger_icon.png';
+import closeIcon from '../imgs/close_icon.png'
 
 /*
  * HEADER E BARRA DE NAVEGAÇÃO RESPONSIVOS
@@ -146,6 +146,7 @@ export default class AppHeader extends Component {
           </div>
         }
 
+        {/*
         {!this.searchInputVisible && 
            <div className="App-Search">
               <div className="App-Input">
@@ -155,13 +156,13 @@ export default class AppHeader extends Component {
             </div>
         }
 
-        {!this.searchInputVisible &&
+         {!this.searchInputVisible &&
           <img src={search} className="close-navbar-button" onClick={() => {this.toggleSearchInput()}}/>
         }
 
         {this.searchInputVisible &&
           <img src={closeIcon} className="close-navbar-button" onClick={() => {this.toggleSearchInput()}}/>
-        }
+        } */}
 
       </header>)
     }
