@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
 
+/*
+ * COMPONENTE DE PAGINAÇÃO DA LISTAGEM DE NOTÍCIAS
+ */
 export default class Pagination extends Component {
     constructor(props) {
         super();
 
+        /*
+         * MÁXIMO DE PÁGINAS
+         */
         this.MAX_PAGES = 5;
 
+        /**
+         * MARCA PÁGINA ESCOLHIDA COMO SELECIONADO
+         * 
+         * @param {number} currentPage 
+         * @param {string} country 
+         */
         this.updatePaginationButtons = (currentPage, country) => {
             var paginationButtons = [];
 
@@ -25,6 +37,9 @@ export default class Pagination extends Component {
             return paginationButtons;
         }
         
+        /*
+         * OBTEM PÁGINA SELECIONADA A PARTIR DA URL
+         */
         this.state = {
             paginationButtons: this.updatePaginationButtons(props.match.params.page, props.match.params.country)
         }

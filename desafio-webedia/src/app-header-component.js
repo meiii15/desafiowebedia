@@ -6,11 +6,32 @@ import search from './search.png';
 import hamburguer from './imgs/Hamburger_icon.png';
 import closeIcon from './imgs/close_icon.png'
 
+/*
+ * HEADER E BARRA DE NAVEGAÇÃO RESPONSIVOS
+ */
 export default class AppHeader extends Component {
   constructor(props) {
     super();
-
+    
+    this.state = {
+      currentCountry: props.match.params.country,
+      navBarVisible: false,
+      searchInputVisible: false,
+      countryButtons: [],
+      isMobile: window.innerWidth < this.MOBILE_WIDTH
+    }
+    
+    /* 
+     * LARGURA MÍNIMA PARA LAYOUT DESKTOP E MÁXIMA PARA MOBILE 
+     */
     this.MOBILE_WIDTH = 1000;
+    
+    
+    /* 
+     * PAÍSES QUE PODEM SER LISTADOS 
+     * initials: parâmetro para chamada da API
+     * label: texto mostrado nos botões da barra de navegação 
+     */
     this.COUNTRIES = [
       { initials: "all", label: "NOTÍCIAS EM DESTAQUE", urlParam: "all" },
       { initials: "br", label: "NOTÍCIAS DO BRASIL", urlParam: "br" },
@@ -19,13 +40,10 @@ export default class AppHeader extends Component {
       { initials: "fr", label: "NOTÍCIAS DA FRANÇA", urlParam: "fr" }
     ];
 
-    this.state = {
-      currentCountry: props.match.params.country,
-      navBarVisible: false,
-      countryButtons: [],
-      isMobile: window.innerWidth < this.MOBILE_WIDTH
-    }
-
+    
+    /**
+     * MARCA O BOTÃO DO PAÍS ESCOLHIDO COMO SELECIONADO 
+     */
     this.updateCountryButtons = () => {
       var countryButtons = [];
 
@@ -43,12 +61,30 @@ export default class AppHeader extends Component {
       return countryButtons;
     }
 
+    
+    /**
+     * ESCONDE E MOSTRA A BARRA DE NAVEGAÇÃO 
+     */
     this.toggleNavBar = () => {
       var navBarVisibility = !this.state.navBarVisible;
       this.setState({ navBarVisible: navBarVisibility });
     }
+
+    
+    /**
+     * ESCONDE E MOSTRA A CAIXA DE TEXTO PARA PESQUISA 
+     */
+    this.toggleSearchInput = () => {
+      var searchInputVisibility = !this.state.searchInputVisible;
+      this.setState({searchInputVisible : searchInputVisibility});
+    }
   }
 
+  
+  /** 
+   * IDENTIFICA MUDANÇAS NAS DIMENSÕES DA TELA 
+   * E ATRIBUI ESTADO MOBILE OU DESKTOP QUANDO NECESSÁRIO
+   */
   onResize() {
     if (this.state.isMobile && window.innerWidth > this.MOBILE_WIDTH) {
       this.setState({ isMobile: false });
@@ -57,57 +93,51 @@ export default class AppHeader extends Component {
     }
   }
 
+  /**
+   * EFETUA E RESPONSIVIDADE AO INICIAR
+   * E ADICIONA EVENTO PARA ALTERAÇÕES DE DIMENSÕES DA TELA
+   */
   componentDidMount() {
     this.onResize();
     window.addEventListener("resize", this.onResize.bind(this));
-    
+
     var currentCountrButtons = this.updateCountryButtons();
-    this.setState({countryButtons: currentCountrButtons});
+    this.setState({ countryButtons: currentCountrButtons });
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.onResize.bind(this));
-    
+
   }
 
   render() {
-    
-    return(
-      <header className="App-header">
-        <img src={hamburguer} className="menu-button" onClick={() => { this.toggleNavBar(); }} />
 
-        <a href="/country/all/page/1" className="App-logo">
-          <img src={logo} alt="logo"/>
-        </a>
+    if (this.state.isMobile) {
+      return (<header className="App-header">
 
-
-        {/* SEARCH-INPUT */}
-
-        {
-          !this.state.isMobile &&
-          <div className="App-Search">
-            <div className="App-Input">
-              <input type="text" placeholder="Search.." />
-              <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
-            </div>
-          </div>
+        {!this.state.searchInputVisible &&
+          <img src={hamburguer} className="menu-button" onClick={() => { this.toggleNavBar(); }} />
         }
 
-        {
-          (this.state.navBarVisible || !this.state.isMobile) &&
+        {!this.state.searchInputVisible &&
+          <a href="/country/all/page/1" className="App-logo">
+            <img src={logo} alt="logo" />
+          </a>
+        }
+
+        {this.state.navBarVisible &&
           <div className="navbar">
             {
-              this.state.countryButtons.map((currentCountry) => 
+              this.state.countryButtons.map((currentCountry) =>
                 <a href={currentCountry.url}
                   className={currentCountry.isSelected}>
-                    {currentCountry.label}
+                  {currentCountry.label}
                 </a>)
             }
           </div>
         }
 
-        {
-          (this.state.isMobile && this.state.navBarVisible) &&
+        {this.state.navBarVisible &&
           <div className="mobile-menu-backgroud">
             <img
               src={closeIcon}
@@ -116,6 +146,53 @@ export default class AppHeader extends Component {
           </div>
         }
 
+        {!this.searchInputVisible && 
+           <div className="App-Search">
+              <div className="App-Input">
+                <input type="text" placeholder="Search.." />
+                <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+              </div>
+            </div>
+        }
+
+        {!this.searchInputVisible &&
+          <img src={search} className="close-navbar-button" onClick={() => {this.toggleSearchInput()}}/>
+        }
+
+        {this.searchInputVisible &&
+          <img src={closeIcon} className="close-navbar-button" onClick={() => {this.toggleSearchInput()}}/>
+        }
+
+      </header>)
+    }
+
+    return (
+      <header className="App-header">
+        <img src={hamburguer} className="menu-button" onClick={() => { this.toggleNavBar(); }} />
+
+        <a href="/country/all/page/1" className="App-logo">
+          <img src={logo} alt="logo" />
+        </a>
+
+        <div className="navbar">
+            {
+              this.state.countryButtons.map((currentCountry) =>
+                <a href={currentCountry.url}
+                  className={currentCountry.isSelected}>
+                  {currentCountry.label}
+                </a>)
+            }
+        </div>
+
+        {/* SEARCH-INPUT */}
+
+        <div className="App-Search">
+          <div className="App-Input">
+            <input type="text" placeholder="Search.." />
+            <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
+          </div>
+        </div>
+      
       </header>);
   }
 }

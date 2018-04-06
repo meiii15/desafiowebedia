@@ -25,6 +25,12 @@ class App extends Component {
         
         <Router>
           <div>
+            {/* 
+              * AO ACESSAR O ROOT
+              * É FEITO REDIRECIONAMENTO PARA 
+              * PRIMEIRA PÁGINA DA LISTAGEM DE NOTÍCIAS
+              * EM DESTQUE
+              */}
             <Route exact path="/" render={() => (
                 <Redirect to="/country/all/page/1"/>
             )}/>

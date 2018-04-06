@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 
+/**
+ * COMPONENTE PARA NOTÍCIA
+ */
 export default class New extends Component{
+    
+    /**
+     * 
+     * @param {*} prop 
+     */
     constructor(prop){
         super(prop);
 

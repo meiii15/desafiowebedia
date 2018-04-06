@@ -3,22 +3,43 @@ import ApiClient from './api-client';
 
 import New from './new-component';
 
+/*
+ * COMPONENTE PARA LISTAGEM DE NOTÍCIAS
+ */
 export default class NewsGrid extends Component {
     constructor(props) {
         super();
         
-        this.MAX_PAGES = 5;
+        /**
+         * MÁXIMO DE NOTÍCIAS POR PÁGINA
+         */
         this.PAGE_SIZE = 7;
+        
+        /**
+         * FLAG PARA LISTAR NOTÍCIAS DE TODOS OS PAÍSES
+         * PARA NOTÍCIAS EM DESTAQUE
+         */
         this.ALL = "all";
 
         this.apiClient = new ApiClient();
 
+        /**
+         * ATUALIZA NOTÍCIAS NA VIEW, ATUALIZA A LISTAGEM
+         * 
+         * @param {*} newsResponse 
+         */
         this.updateNews = (newsResponse) => {
             if (newsResponse.status == "error") {
                 return;
             }
 
-            var news = [];
+            /*
+             * AJUSTA LARGURA DAS COLUNAS
+             * ALTERNANDO ENTRE DUAS MAIS LARGAS E TRÊS MAIS FINAS
+             * A CADA LINHA
+             */ 
+            
+             var news = [];
 
             var largerCount = 0;
             var isLarger = true;
@@ -44,11 +65,17 @@ export default class NewsGrid extends Component {
                 news.push(currentNewData);
             }
 
+            /*
+             * ATUALIZA NOTÍCIAS NA VIEW
+             */
             this.setState({
                 news: news,
             });
         }
 
+        /*
+         * OBTEM NOTÍCIAS EM DESTAQUE
+         */
         this.showTopHeadLines = (page) => {
             var countries = [
                 { 'country': 'us' },
@@ -62,6 +89,9 @@ export default class NewsGrid extends Component {
                 .then(this.updateNews);
         }
 
+        /*
+         * OBTEM NOTÍCIAS DE UM PAÍS
+         */
         this.showNewsFrom = (country, page) => {
 
             if (country == this.ALL) {
@@ -74,17 +104,20 @@ export default class NewsGrid extends Component {
                 .then(this.updateNews);
         }
 
+        /*
+         * OBTENDO PAÍS E PAǴINA A SEREM LISTADOS  
+         * A PARTIR DE PARÂMETROS DA URL
+         */
         var currentCountry = props.match.params.country;
         var currentPage = props.match.params.page;
 
-        this.state = {
-            currentPage:0,
-            currentCountry: "all",
-            news:[]
-        };
-
+        /*
+         * CASO NÃO SEJA INFORMADO UM PAÍS, 
+         * SERÁ FEITA A LISTAGEM DE NOTÍCIAS EM DESTAQUE
+         * NA PRIMEIRA PÁGINA
+         */ 
         if(!currentCountry){
-            this.showNewsFrom(this.ALL, 0);
+            this.showTopHeadLines(1);
             return;
         }
 
