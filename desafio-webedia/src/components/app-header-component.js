@@ -50,11 +50,11 @@ export default class AppHeader extends Component {
       var countryButtons = [];
 
       var filterValue = props.match.params.filterValue;
+      var filterParam = ( filterValue ? "/filter/" + filterValue : "");
 
       for (var currentCountry of this.COUNTRIES) {
         var isSelected = this.state.currentCountry === currentCountry.initials ? "active" : "";
 
-        var filterParam = ( filterValue ? "/filter/" + filterValue : "");
 
         countryButtons.push({
           initials: currentCountry.initials,
@@ -161,23 +161,7 @@ export default class AppHeader extends Component {
           </div>
         }
 
-        {/*
-        {!this.searchInputVisible && 
-           <div className="App-Search">
-              <div className="App-Input">
-                <input type="text" placeholder="Search.." />
-                <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
-              </div>
-            </div>
-        }
-
-         {!this.searchInputVisible &&
-          <img src={search} className="close-navbar-button" onClick={() => {this.toggleSearchInput()}}/>
-        }
-
-        {this.searchInputVisible &&
-          <img src={closeIcon} className="close-navbar-button" onClick={() => {this.toggleSearchInput()}}/>
-        } */}
+        <SearchField isMobile={this.state.isMobile}/>
 
       </header>)
     }
@@ -200,7 +184,7 @@ export default class AppHeader extends Component {
             }
         </div>
 
-        <SearchField/>
+        <SearchField isMobile={this.state.isMobile}/>
 
       </header>);
   }

@@ -9,8 +9,6 @@ import SearchField from './search-field-component';
  */
 export default class NewsGrid extends Component {
     constructor(props) {
-        debugger;
-        
         super();
         
         /**
