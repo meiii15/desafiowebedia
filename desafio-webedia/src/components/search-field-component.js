@@ -44,10 +44,16 @@ export default class SearchField extends Component {
             window.location.href = searchUrl;
         };
 
-        this.toggleSearchField = () =>{
+        this.toggleSearchField = () => {
             var isHiddenState = this.state.isHidden;
             
             this.setState({isHidden : !isHiddenState});
+        }
+
+        this.onEnter = (e) => {
+            if(e.key == "Enter"){
+                this.search();
+            }
         }
 
         var currentFilter = UrlUtils.getParam("filter", currentLocation);
@@ -61,7 +67,7 @@ export default class SearchField extends Component {
             return (
                 <div className="App-Search">
                     <div className="App-Input">
-                        <input type="text" placeholder="Search.." onChange={this.updateSearchContent} value={this.state.content} />
+                        <input type="text" placeholder="Search.." onChange={this.updateSearchContent} value={this.state.content} onKeyPress={this.onEnter}/>
                         <button className="Search-Button" type="submit" onClick={() => this.search()}><img src={search} className="Logo-Search" alt="search" /></button>
                     </div>
                 </div>
@@ -73,7 +79,7 @@ export default class SearchField extends Component {
                         <div className="App-Search">
                             <div className="App-Input">
                                 <button className="Search-Button" type="submit" onClick={() => this.search()}><img src={search} className="Logo-Search" alt="search" /></button>
-                                <input type="text" placeholder="Search.." onChange={this.updateSearchContent} value={this.state.content} />
+                                <input type="text" placeholder="Search.." onChange={this.updateSearchContent} value={this.state.content} onKeyPress={this.onEnter}/>
                             </div>
                         </div>
                     }
