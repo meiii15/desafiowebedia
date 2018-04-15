@@ -21,6 +21,9 @@ export default class Pagination extends Component {
         this.updatePaginationButtons = (currentPage, country) => {
             var paginationButtons = [];
 
+            var filterValue = props.match.params.filterValue;
+            var filterParam = ( filterValue ? "/filter/" + filterValue : "");
+
             for (var currentButtonIndex = 1; currentButtonIndex <= this.MAX_PAGES; currentButtonIndex++) {
                 let isSelected = currentButtonIndex == currentPage;
 
@@ -29,7 +32,7 @@ export default class Pagination extends Component {
 
                 paginationButtons.push({
                     buttonClassName: buttonClassName,
-                    url: "/country/" + country + "/page/" + pageIndex,
+                    url: "/country/" + country + "/page/" + pageIndex + filterParam,
                     pageIndex: pageIndex
                 });
             }

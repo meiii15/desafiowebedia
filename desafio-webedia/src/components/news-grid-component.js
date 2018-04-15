@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import ApiClient from '../api-client';
 
 import New from './new-component';
+import SearchField from './search-field-component';
 
 /*
  * COMPONENTE PARA LISTAGEM DE NOTÍCIAS
  */
 export default class NewsGrid extends Component {
     constructor(props) {
+        debugger;
+        
         super();
         
         /**
@@ -79,7 +82,7 @@ export default class NewsGrid extends Component {
         /*
          * OBTEM NOTÍCIAS EM DESTAQUE
          */
-        this.showTopHeadLines = (page) => {
+        this.showTopHeadLines = (page, filter) => {
             var countries = [
                 { 'country': 'us' },
                 { 'country': 'fr' },
@@ -87,7 +90,7 @@ export default class NewsGrid extends Component {
                 { 'country': 'ar' }
             ];
 
-            this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page)
+            this.apiClient.getTopHeadLines(countries, this.PAGE_SIZE, page, filter)
                 .then(response => response.json())
                 .then(this.updateNews);
         }
@@ -95,14 +98,14 @@ export default class NewsGrid extends Component {
         /*
          * OBTEM NOTÍCIAS DE UM PAÍS
          */
-        this.showNewsFrom = (country, page) => {
+        this.showNewsFrom = (country, page, filter) => {
 
             if (country == this.ALL) {
-                this.showTopHeadLines(page);
+                this.showTopHeadLines(page, filter);
                 return;
             }
 
-            this.apiClient.getNewsFrom(country, this.PAGE_SIZE, page)
+            this.apiClient.getNewsFrom(country, this.PAGE_SIZE, page, filter)
                 .then(response => response.json())
                 .then(this.updateNews);
         }
@@ -113,6 +116,8 @@ export default class NewsGrid extends Component {
          */
         var currentCountry = props.match.params.country;
         var currentPage = props.match.params.page;
+        var filter = props.match.params.filterValue;
+
 
         /*
          * CASO NÃO SEJA INFORMADO UM PAÍS, 
@@ -120,11 +125,12 @@ export default class NewsGrid extends Component {
          * NA PRIMEIRA PÁGINA
          */ 
         if(!currentCountry){
-            this.showTopHeadLines(1);
+            this.showTopHeadLines(1, filter);
             return;
         }
 
-        this.showNewsFrom(currentCountry, currentPage)
+        
+        this.showNewsFrom(currentCountry, currentPage, filter);
     }
 
     render() {

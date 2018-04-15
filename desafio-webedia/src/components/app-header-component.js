@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import logo from '../imgs/brand.png';
-import search from '../imgs/search.png';
 import hamburguer from '../imgs/Hamburger_icon.png';
 import closeIcon from '../imgs/close_icon.png'
+
+import SearchField from './search-field-component';
 
 /*
  * HEADER E BARRA DE NAVEGAÇÃO RESPONSIVOS
@@ -18,7 +19,8 @@ export default class AppHeader extends Component {
       navBarVisible: false,
       searchInputVisible: false,
       countryButtons: [],
-      isMobile: window.innerWidth < this.MOBILE_WIDTH
+      isMobile: window.innerWidth < this.MOBILE_WIDTH,
+      searchInputContent: ""
     }
     
     /* 
@@ -47,19 +49,27 @@ export default class AppHeader extends Component {
     this.updateCountryButtons = () => {
       var countryButtons = [];
 
+      var filterValue = props.match.params.filterValue;
+
       for (var currentCountry of this.COUNTRIES) {
         var isSelected = this.state.currentCountry === currentCountry.initials ? "active" : "";
+
+        var filterParam = ( filterValue ? "/filter/" + filterValue : "");
 
         countryButtons.push({
           initials: currentCountry.initials,
           label: currentCountry.label,
           isSelected: isSelected,
-          url: "/country/" + currentCountry.urlParam + "/page/1"
+          url: "/country/" + currentCountry.urlParam + "/page/1" + filterParam
         });
       }
 
       return countryButtons;
     }
+
+    this.updateSearchInputContent = (e) => {
+        this.state.searchInputContent = e.tartget.value;
+    };
 
     
     /**
@@ -77,6 +87,11 @@ export default class AppHeader extends Component {
     this.toggleSearchInput = () => {
       var searchInputVisibility = !this.state.searchInputVisible;
       this.setState({searchInputVisible : searchInputVisibility});
+    }
+
+    this.search = () => {
+      var searchContent = this.state.searchInputContent;
+
     }
   }
 
@@ -107,8 +122,8 @@ export default class AppHeader extends Component {
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.onResize.bind(this));
-
   }
+
 
   render() {
 
@@ -185,15 +200,8 @@ export default class AppHeader extends Component {
             }
         </div>
 
-        {/* SEARCH-INPUT */}
+        <SearchField/>
 
-        <div className="App-Search">
-          <div className="App-Input">
-            <input type="text" placeholder="Search.." />
-            <button className="Search-Button" type="submit"><img src={search} className="Logo-Search" alt="search" /></button>
-          </div>
-        </div>
-      
       </header>);
   }
 }

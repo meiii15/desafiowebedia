@@ -1,3 +1,5 @@
+import UrlUtils from './utils/url-utils'
+
 export default class ApiClient{
     constructor(){
         
@@ -13,7 +15,7 @@ export default class ApiClient{
          * @param {number} pageSize 
          * @param {number} page 
          */
-        this.getNewsFrom = function(country, pageSize, page)
+        this.getNewsFrom = function(country, pageSize, page, filter = null)
         {
             let url = 'https://newsapi.org/v2/top-headlines?country=' + country + '&pageSize=' + pageSize + '&page=' + page + '&apiKey=' + this.API_KEY;
             
@@ -31,18 +33,27 @@ export default class ApiClient{
          * @param {number} pageSize 
          * @param {number} page 
          */
-        this.getTopHeadLines = function(countries, pageSize, page)
+        this.getTopHeadLines = function(countries, pageSize, page, filter = null)
         {
             var countriesParams = countries.map(function(param) {
                     return ['country', param.country].map(encodeURIComponent).join("=");
                 }).join("&");
                 
             
-            let url = 'https://newsapi.org/v2/top-headlines?' + countriesParams + '&pageSize=' + pageSize + '&page=' + page + '&apiKey=' + this.API_KEY;
+
+            let url = 'https://newsapi.org/v2/top-headlines?' + countriesParams + '&pageSize=' + pageSize + '&page=' + page;
             
+            url += filter ? "&q=" + filter : "";
+
+            url += '&apiKey=' + this.API_KEY;
+
             let request = new Request(url);
 
             return fetch(request);
+        }
+
+        this.search = function(urlFont, pageSize, page, term){
+            let url 
         }
     }
     

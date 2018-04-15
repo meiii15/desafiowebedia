@@ -19,7 +19,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        
+
+
         <Router>
           <div>
             {/* 
@@ -29,25 +30,38 @@ class App extends Component {
               * EM DESTQUE
               */}
             <Route exact path="/" render={() => (
-                <Redirect to="/country/all/page/1"/>
-            )}/>
-            
+              <Redirect to="/country/all/page/1" />
+            )} />
+
             {/*HEADER*/}
-            <Route path="/country/:country/*" component={AppHeader}/>
-            
+            {['/country/:country/page/:page', '/country/:country/page/:page/filter/:filterValue']
+              .map((route) =>
+                <Route exact={true} path={route} component={AppHeader} />
+              )
+            }
+
             {/* GRID */}
-            <Route path="/country/:country/page/:page" component={NewsGrid}/>
-            
+            {['/country/:country/page/:page', '/country/:country/page/:page/filter/:filterValue']
+              .map((route) =>
+                <Route exact={true} path={route} component={NewsGrid} />
+              )
+            }
             {/* PAGINATION */}
-            <Route path="/country/:country/page/:page" component={Pagination}/>
+            {['/country/:country/page/:page', '/country/:country/page/:page/filter/:filterValue']
+              .map((route) =>
+                <Route exact={true} path={route} component={Pagination} />
+              )
+            }
+
           </div>
         </Router>
+
 
 
         {/* FOOTER */}
         <div className="footer">
           <a href="http://jobs.webedia.group/frontend">
-            <img src={logo} alt="logo" className="logo-footer"/>
+            <img src={logo} alt="logo" className="logo-footer" />
           </a>
         </div>
 
